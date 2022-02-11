@@ -1,0 +1,63 @@
+name: Fly Deploy
+on: [push]
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: stordly_test
+          POSTGRES_PASSWORD: postgress
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5433
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start database
+        run: docker-compose up -d postgres
+      - uses: erlef/setup-beam@988e02bfe678367a02564f65ca2e37726dc0268f
+        with:
+          elixir-version: "1.13.2"
+          otp-version: "24"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "yarn"
+          cache-dependency-path: assets/yarn.lock
+      - uses: nanasess/setup-chromedriver@master
+        with:
+          chromedriver-version: "98.0.4758.80"
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get && cd assets && yarn
+      - name: Compile assets
+        run: mix assets.deploy
+      - name: Run tests
+        id: test
+        env:
+          WALLABY_DRIVER: chrome
+        run: mix test
+      - uses: superfly/flyctl-actions@1.1
+        if: success()
+        with:
+          args: "deploy"
+      - uses: actions/upload-artifact@v2
+        if: steps.test.conclusion == 'failure'
+        with:
+          name: screenshots
+          path: screenshots/

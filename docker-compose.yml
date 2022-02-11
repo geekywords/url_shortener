@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  postgres:
+    container_name: stordly_postgres_container
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_DB=stordly_dev
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

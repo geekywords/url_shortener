@@ -1,0 +1,97 @@
+@import "./phoenix.css";
+
+body {
+  margin: 0;
+}
+
+main.container {
+  background: black;
+  margin: 0 auto;
+  max-width: unset;
+  padding: 0 2rem;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+div.wrapper {
+  max-width: 96rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+h1.title {
+  font-size: 10rem;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin-bottom: 0rem;
+}
+
+h2.subTitle {
+  font-size: 4rem;
+  text-align: center;
+  color: white;
+  margin-bottom: 4rem;
+}
+
+form {
+  display: flex;
+}
+
+input.url {
+  background-color: white;
+  color: #1f2937;
+  border-radius: 1rem 0 0 1rem;
+  border: 0;
+}
+
+input[type="submit"] {
+  border: 0;
+  background-color: #3646f5;
+  border-radius: 0 1rem 1rem 0rem;
+}
+
+input[type="submit"]:hover {
+  background-color: #2652ab;
+}
+
+div.error {
+  background-color: #151515;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 1rem;
+  color: #ff3e00;
+  font-weight: 600;
+}
+
+div.success {
+  background-color: #151515;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 1rem;
+  color: #29ff65;
+  font-weight: 600;
+}
+
+a.hashedURL {
+  color: inherit;
+}
+
+div.copy {
+  color: white;
+  display: inline-block;
+  margin-left: 3rem;
+  cursor: copy;
+}
+
+svg.icon {
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-top;
+}

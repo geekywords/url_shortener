@@ -1,0 +1,97 @@
+STORD URL Shortener Exercise
+
+Requisites:
+ - Elixir v1.13.2
+ - Erlang v24
+ - Docker v20
+ - NodeJS v16
+ - Yarn v1
+
+How to run it:
+
+Please run `make setup` to setup all the necessary services to run the application.
+After that you can run `make server` to run the project, it will be listening at post 4000.
+Now you can open http://localhost:4000 in your favourite browser.
+
+Tests:
+
+Please run `make test` to run all tests.
+
+
+Technical decisions:
+
+Application is a pretty generic Single Page Application using ReactJS and Elixir Phoenix Framework as backend.
+
+
+Frontend
+
+ReactJS was chosen because it is the library I know the most to build rich Web applications.
+
+HTML
+
+HTML uses HTML5 features like input validation, along with semantic markup for its elements.
+It also makes use of `data-*` attributes for testing purposes. Personally I don't like to deploy them
+to production just to avoid showing how you run your tests.
+
+CSS
+
+CSS architecture is extremely simple, I would say even archaic. It is just classes like in 2005.
+It doesn't follow any pattern or methodology in special, this was my choice as the scope of the application
+doesn't really need advanced techniques like BEM Methodology or Atomic CSS, or modern techniques like Immutable CSS,
+this one being my prefered way of writing CSS since 2015.
+
+As an exercise we can migrate it to Immutable CSS.
+
+JavaScript
+
+I have decided to got vanilla JavaScript as the scope of the application doesn't need TypeScript, it also gives your
+ReactJS development a fresh or air from TypeScript.
+
+As an exercise we can migrate it to TypeScript or ReScript which I have also worked on.
+
+
+Backend
+
+Elixir Phoenix Framework was chosen because I really really enjoy it, specially how fast you can move thanks
+to ecosystem of libraries and the power of Elixir itself, and of course Erlang.
+
+The server has 2 main routes along with an `/api/` scope to handle the generation of hashes.
+
+Hash generation
+
+This is the first time I have to generate random data with Elixir, I explored how to do it and ended with
+a call to `:crypto.hash` function.
+
+Redirection when hash doesn't exist
+
+Exercise document leaves to the reader what to do when an user tries to load `/hash` and it doesn't exist.
+I took the liberty to redirect it the homepage, in order to offer an invitation to the user to use the application.
+Another possibility could be show a 404 error page with a link to the homepage.
+
+
+Tests
+
+This is actually my first time writing tests in Elixir, I would say it was a nice experiencie but still
+got stuck in some parts, specially those functions with a name in the midddle like `assert has`, it throws
+me off and reminds me of Ruby assertions functions.
+
+Tests include functional tests for the controllers and end to end tests for the frontend application, these
+tests were done using Wallaby, I really like how they read.
+
+
+Database
+
+I choose Postgres as the persistent database because it is the one I am most familiar after MySQL.
+There is a single table with `hash` and `url` columns, which are also unique indexes.
+
+Exercise document doesn't comment on constraints regarding Hash collitions or repeated URLs,
+so I make the decision to don't allow different hashes for the same URL.
+
+
+CI/CD
+
+The repository of this application lives on GitHub, naturally it uses GitHub Actions to
+implement a fairly straightforward continous delivery by running the tests and if they were
+successful deploy it to Fly.io: https://broken-grass-5555.fly.dev.
+
+P.D. Would be nice to have this file in Markdown instead of plain text, just for the richer format.
